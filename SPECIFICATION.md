@@ -31,6 +31,12 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 
 ## Grammar
 
+### Keywords
+
+- context
+
+### Productions
+
 **executionType**:\
 | "command"
 | "function"
@@ -61,7 +67,29 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 
 **argument**:\
 | typeAnnotation
+| identity
 
 **function**:\
-| executionType identity {argument} {statement}
+| executionType identity {argument} ["is"] {statement} "."
 
+### Examples
+Because I'm only a robot, here are a few examples of what the grammer should parse.
+
+```
+function add a b is a + b.
+```
+or
+```
+function add a b
+    a + b.
+```
+or
+```
+function add a b
+    a + b
+.
+```
+
+```
+command hello context.reply("Hello, $(context.author.name)").
+```
