@@ -91,5 +91,29 @@ function add a b
 ```
 
 ```
-command hello context.reply("Hello, $(context.author.name)").
+command hello context.reply "Hello, $(context.author.name)".
 ```
+
+```
+set {
+    prefix = "$".
+    identifier = "numbers".
+    Number as Int as String.
+}
+
+function add a b is a + b.
+function mul a b is a * b.
+function h_sub a b is a - b.
+
+command add a b
+    context.reply $(use function add a b).
+command mul a b
+    context.reply $(use function mul a b).
+command sun a b
+    context.reply $(h_sub a b).
+```
+
+## Semantics
+All functions marked as command are exported from the file, visible to all nodes. When a function is executed and its identifier cannot be found in the current context, it is looked for globally by asking the main node for it.
+
+`$(expr)` prioritizes evaluating the expression. This can be used for both the typical usage of parenthesis for prioritizing expressions as well as for string interpolation in bash.
