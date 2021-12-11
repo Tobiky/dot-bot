@@ -34,6 +34,12 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 ### Keywords
 
 - context
+- function
+- command
+- string
+- character
+- integer
+- float
 
 ### Productions
 
@@ -57,7 +63,7 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 | dataType
 
 **typeAnnotation**:\
-| "<" identity ":" dataType ">"
+| "<" dataType ":" identity ">"
 
 **expression**:\
 |
@@ -73,6 +79,7 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 | executionType identity {argument} ["is"] {statement} "."
 
 ### Examples
+
 Because I'm only a robot, here are a few examples of what the grammer should parse.
 
 ```
@@ -95,6 +102,16 @@ command hello context.reply "Hello, $(context.author.name)".
 ```
 
 ```
+user = sql(SELECT * FROM users)
+value = mongosh(mongodb://localhost:28015, 
+    use valueDb
+    db.valueCollection.find({
+        userId: $(user.id)
+    })
+)
+```
+
+```
 set {
     prefix = "$".
     identifier = "numbers".
@@ -114,6 +131,13 @@ command sun a b
 ```
 
 ## Semantics
-All functions marked as command are exported from the file, visible to all nodes. When a function is executed and its identifier cannot be found in the current context, it is looked for globally by asking the main node for it.
 
-`$(expr)` prioritizes evaluating the expression. This can be used for both the typical usage of parenthesis for prioritizing expressions as well as for string interpolation in bash.
+- All functions marked as command are exported from the file, visible to all nodes. When a function is executed and its identifier cannot be found in the current context, it is looked for globally by asking the main node for it.
+
+- `$(expr)` prioritizes evaluating the expression. This can be used for both the typical usage of parenthesis for prioritizing expressions as well as for string interpolation in bash.
+
+- `type(literal)` evaluates or converts the literal into the type. While this should work for datatypes its primarly part of .BOT to allow for natural integration of things like SQL into the script as well as syntax highlighting for those situations. The script engine treat the literal mostly as a regular `String`.
+
+- Statically typed but support for integrating converstion naturally.
+
+- Evaluation of types are lazy except when annotated.
