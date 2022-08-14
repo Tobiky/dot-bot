@@ -79,7 +79,7 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 | executionType identity {argument} ["is"] {statement} "."
 
 ### Examples
-
+<!-- I don't remember why I wrote that I'm only a robot -->
 Because I'm only a robot, here are a few examples of what the grammer should parse.
 
 ```
@@ -102,8 +102,10 @@ command hello context.reply "Hello, $(context.author.name)".
 ```
 
 ```
-user = sql(SELECT * FROM users)
-value = mongosh(mongodb://localhost:28015, 
+user = $sql(SELECT * FROM users)
+value = $mongosh{
+    host="localhost:8080"
+}( 
     use valueDb
     db.valueCollection.find({
         userId: $(user.id)
@@ -118,6 +120,8 @@ set {
     Number as Int as String.
 }
 
+set prefix = "/"
+
 function add a b is a + b.
 function mul a b is a * b.
 function h_sub a b is a - b.
@@ -126,7 +130,7 @@ command add a b
     context.reply $(use function add a b).
 command mul a b
     context.reply $(use function mul a b).
-command sun a b
+command sub a b
     context.reply $(h_sub a b).
 ```
 
@@ -134,10 +138,12 @@ command sun a b
 
 - All functions marked as command are exported from the file, visible to all nodes. When a function is executed and its identifier cannot be found in the current context, it is looked for globally by asking the main node for it.
 
-- `$(expr)` prioritizes evaluating the expression. This can be used for both the typical usage of parenthesis for prioritizing expressions as well as for string interpolation in bash.
+- `$OPT_IDENTIFIER{opts}(expr)` prioritizes evaluating the expression. This can be used for both the typical usage of parenthesis for prioritizing expressions as well as for string interpolation in bash. Optional identifiers and further options can be used in some cases. For example when including an SQL-language or MongoDB Shell integration where a specific host or other configuration might necessary to run commands.
 
 - `type(literal)` evaluates or converts the literal into the type. While this should work for datatypes its primarly part of .BOT to allow for natural integration of things like SQL into the script as well as syntax highlighting for those situations. The script engine treat the literal mostly as a regular `String`.
 
 - Statically typed but support for integrating converstion naturally.
 
 - Evaluation of types are lazy except when annotated.
+
+- Commands and functions can have the same name but in that case will require additional identification in such cases.
