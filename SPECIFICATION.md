@@ -165,9 +165,14 @@ command sub a b
 
 ## Semantics
 
+- Main node is responsible for resolving function and commands. Each node and
+file are given exploration value, publically visisble as an incrementing number.
+
 - All functions marked as command are exported from the file, visible to all
 nodes. When a function is executed and its identifier cannot be found in the
-current context, it is looked for globally by asking the main node for it.
+current context, it is looked for globally by asking the main node for it. The
+order preference is: shortest graph distance to requesting node, shortest graph
+distance to main node, lowest exploration value.
 
 - `$OPT_IDENTIFIER{opts}(expr)` prioritizes evaluating the expression. This can
 be used for both the typical usage of parenthesis for prioritizing expressions
@@ -182,7 +187,9 @@ integration of things like SQL into the script as well as syntax highlighting
 for those situations. The script engine treat the literal mostly as a regular
 `String`.
 
-- Statically typed but support for integrating converstion naturally.
+- Statically typed but support for integrating converstion naturally. Also
+include natural dynamic type for cases when JSON-like values are returned
+or used (such as MongSh).
 
 - Evaluation of types are lazy except when annotated.
 
