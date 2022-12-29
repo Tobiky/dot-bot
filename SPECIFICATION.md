@@ -79,55 +79,84 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 | executionType identity {argument} ["is"] {statement} "."
 
 ### Examples
-<!-- I don't remember why I wrote that I'm only a robot -->
-Because I'm only a robot, here are a few examples of what the grammer should parse.
 
-```
+Examples to showcase how the language should aim to look like and how it should
+be used.
+
+#### Simple add function
+
+##### Inline
+
+```none
 function add a b is a + b.
 ```
-or
-```
+
+#### Explicit
+
+```none
 function add a b
     a + b.
 ```
+
 or
-```
+
+```none
 function add a b
     a + b
 .
 ```
 
-```
+#### Simple command for replying to user
+
+```none
 command hello context.reply "Hello, $(context.author.name)".
 ```
 
+#### Simple call to DSL integration
+
+```none
+user = $sql(SELECT * FROM users)
 ```
+
+#### DSL integration call with options
+
+```none
 user = $sql(SELECT * FROM users)
 value = $mongosh{
     host="localhost:8080"
 }( 
-    use valueDb
+    use valueDb;
     db.valueCollection.find({
         userId: $(user.id)
-    })
+    });
 )
 ```
 
-```
+#### Meta configuration
+
+Prefix for commands (when called by user on platform) using explicit and inline format.
+
+```none
 set {
     prefix = "$".
-    identifier = "numbers".
-    Number as Int as String.
 }
 
 set prefix = "/"
+```
+
+#### Handling internal and external naming collision
+
+```none
+use util.{add, div}.
 
 function add a b is a + b.
 function mul a b is a * b.
 function h_sub a b is a - b.
 
 command add a b
-    context.reply $(use function add a b).
+    context.reply $(use local function add a b).
+command div a b
+    context.reply $(use foreign function mul a b).
 command mul a b
     context.reply $(use function mul a b).
 command sub a b
@@ -136,14 +165,26 @@ command sub a b
 
 ## Semantics
 
-- All functions marked as command are exported from the file, visible to all nodes. When a function is executed and its identifier cannot be found in the current context, it is looked for globally by asking the main node for it.
+- All functions marked as command are exported from the file, visible to all
+nodes. When a function is executed and its identifier cannot be found in the
+current context, it is looked for globally by asking the main node for it.
 
-- `$OPT_IDENTIFIER{opts}(expr)` prioritizes evaluating the expression. This can be used for both the typical usage of parenthesis for prioritizing expressions as well as for string interpolation in bash. Optional identifiers and further options can be used in some cases. For example when including an SQL-language or MongoDB Shell integration where a specific host or other configuration might necessary to run commands.
+- `$OPT_IDENTIFIER{opts}(expr)` prioritizes evaluating the expression. This can
+be used for both the typical usage of parenthesis for prioritizing expressions
+as well as for string interpolation in bash. Optional identifiers and further
+options can be used in some cases. For example when including an SQL-language
+or MongoDB Shell integration where a specific host or other configuration might
+necessary to run commands.
 
-- `type(literal)` evaluates or converts the literal into the type. While this should work for datatypes its primarly part of .BOT to allow for natural integration of things like SQL into the script as well as syntax highlighting for those situations. The script engine treat the literal mostly as a regular `String`.
+- `type(literal)` evaluates or converts the literal into the type. While this
+should work for datatypes its primarly part of .BOT to allow for natural
+integration of things like SQL into the script as well as syntax highlighting
+for those situations. The script engine treat the literal mostly as a regular
+`String`.
 
 - Statically typed but support for integrating converstion naturally.
 
 - Evaluation of types are lazy except when annotated.
 
-- Commands and functions can have the same name but in that case will require additional identification in such cases.
+- Commands and functions can have the same name but in that case will require
+additional identification in such cases.
