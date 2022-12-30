@@ -76,7 +76,7 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 | identity
 
 **function**:\
-| executionType identity {argument} ["is"] {statement} "."
+| executionType identity {argument} "is|\n" {statement} "."
 
 ### Examples
 
@@ -115,13 +115,13 @@ command hello context.reply "Hello, $(context.author.name)".
 #### Simple call to DSL integration
 
 ```none
-user = $sql(SELECT * FROM users)
+users = $sql(SELECT * FROM users)
 ```
 
 #### DSL integration call with options
 
 ```none
-user = $sql(SELECT * FROM users)
+user = $sql(SELECT * FROM users WHERE users.id = 0)
 value = $mongosh{
     host="localhost:8080"
 }( 
