@@ -174,6 +174,9 @@ current context, it is looked for globally by asking the main node for it. The
 order preference is: shortest graph distance to requesting node, shortest graph
 distance to main node, lowest exploration value.
 
+- Commands and functions can have the same name but in that case will require
+additional identification in such cases.
+
 - `$OPT_IDENTIFIER{opts}(expr)` prioritizes evaluating the expression. This can
 be used for both the typical usage of parenthesis for prioritizing expressions
 as well as for string interpolation in bash. Optional identifiers and further
@@ -191,7 +194,4 @@ for those situations. The script engine treat the literal mostly as a regular
 include natural dynamic type for cases when JSON-like values are returned
 or used (such as MongSh).
 
-- Evaluation of types are lazy except when annotated.
-
-- Commands and functions can have the same name but in that case will require
-additional identification in such cases.
+- Evaluation of types is lazy (extrapolated) except when annotated.
