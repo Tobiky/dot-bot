@@ -87,7 +87,7 @@ users = $sql(SELECT * FROM users)
 user = $sql(SELECT * FROM users WHERE users.id = 0)
 value = $mongosh{
     host="localhost:8080"
-}( 
+}(
     use valueDb;
     db.valueCollection.find({
         userId: $(user.id)
@@ -139,7 +139,7 @@ fnc sub <a: integer> <b: integer>
 **executionType**:\
 | "cmd"
 | "fnc"
-| identity
+| "<" executionType ":" type ">"
 
 **primitiveType**:\
 | "string"\
@@ -155,21 +155,47 @@ fnc sub <a: integer> <b: integer>
 | executionType\
 | dataType
 
-**typeAnnotation**:\
-| "<" dataType ":" identity ">"
+**booleanBinaryOperator**:\
+| "=="
+| "&&"
+| "||"
+| "^^"
+
+**binaryOperator**:\
+| "+"
+| "-"
+| "*"
+| "/"
+| "%"
+| "&"
+| "|"
+| "^"
+| "<<"
+| ">>"
+| "!" booleanBinaryOperator
+
+**booleanUnaryOperator**:\
+| "!"
+
+**leftUnaryOperator**:\
+| "~"
+| "!" booleanUnaryOperator
 
 **expression**:\
-|
+| expression binaryOperator expression
+| leftUnaryOperator expression
 
 **statement**:\
 | expression
+| statement ";"
 
 **argument**:\
-| typeAnnotation
+| "<" identity ":" type ">"
 | identity
 
 **function**:\
-| executionType identity {argument} "is|\n" {statement} "."
+| executionType identity {argument} "is" statement "."
+| executionType identity {argument} "\n" statement {statement} "."
 
 ### Informal Semantics
 
