@@ -126,6 +126,14 @@ cmd sub a b
     context.reply $(h_sub a b).
 ```
 
+#### Function with type annotation
+
+```none
+fnc add <a: integer> <b: integer> is a + b.
+fnc sub <a: integer> <b: integer>
+    a - b.
+```
+
 ## Productions
 
 **executionType**:\
@@ -194,4 +202,5 @@ for those situations. The script engine treat the literal mostly as a regular
 include natural dynamic type for cases when JSON-like values are returned
 or used (such as MongSh).
 
-- Evaluation of types is lazy (extrapolated) except when annotated.
+- Evaluation of types is lazy (extrapolated) except when annotated. The
+execution engine will attempt to solve (and remember) the type when needed.
