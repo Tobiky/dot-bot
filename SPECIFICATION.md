@@ -41,43 +41,6 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 - integer
 - float
 
-### Productions
-
-**executionType**:\
-| "cmd"
-| "fnc"
-| identity
-
-**primitiveType**:\
-| "string"\
-| "character"\
-| "integer"\
-| "float"
-
-**dataType**:\
-| primitiveType\
-| identity
-
-**type**:\
-| executionType\
-| dataType
-
-**typeAnnotation**:\
-| "<" dataType ":" identity ">"
-
-**expression**:\
-|
-
-**statement**:\
-| expression
-
-**argument**:\
-| typeAnnotation
-| identity
-
-**function**:\
-| executionType identity {argument} "is|\n" {statement} "."
-
 ### Examples
 
 Examples to showcase how the language should aim to look like and how it should
@@ -163,7 +126,42 @@ cmd sub a b
     context.reply $(h_sub a b).
 ```
 
-#### 
+## Productions
+
+**executionType**:\
+| "cmd"
+| "fnc"
+| identity
+
+**primitiveType**:\
+| "string"\
+| "character"\
+| "integer"\
+| "float"
+
+**dataType**:\
+| primitiveType\
+| identity
+
+**type**:\
+| executionType\
+| dataType
+
+**typeAnnotation**:\
+| "<" dataType ":" identity ">"
+
+**expression**:\
+|
+
+**statement**:\
+| expression
+
+**argument**:\
+| typeAnnotation
+| identity
+
+**function**:\
+| executionType identity {argument} "is|\n" {statement} "."
 
 ## Semantics
 
