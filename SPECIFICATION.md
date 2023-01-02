@@ -134,7 +134,7 @@ fnc sub <a: integer> <b: integer>
     a - b.
 ```
 
-## Productions
+### Productions
 
 **executionType**:\
 | "cmd"
@@ -171,7 +171,7 @@ fnc sub <a: integer> <b: integer>
 **function**:\
 | executionType identity {argument} "is|\n" {statement} "."
 
-## Semantics
+### Informal Semantics
 
 - Main node is responsible for resolving function and commands. Each node and
 file are given exploration value, publically visisble as an incrementing number.
