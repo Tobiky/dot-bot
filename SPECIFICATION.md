@@ -34,8 +34,8 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 ### Keywords
 
 - context
-- function
-- command
+- fnc
+- cmd
 - string
 - character
 - integer
@@ -44,8 +44,8 @@ seperate functions, there wouldn't be much reason to create a DSL for bots.
 ### Productions
 
 **executionType**:\
-| "command"
-| "function"
+| "cmd"
+| "fnc"
 | identity
 
 **primitiveType**:\
@@ -88,20 +88,20 @@ be used.
 ##### Inline
 
 ```none
-function add a b is a + b.
+fnc add a b is a + b.
 ```
 
 #### Explicit
 
 ```none
-function add a b
+fnc add a b
     a + b.
 ```
 
 or
 
 ```none
-function add a b
+fnc add a b
     a + b
 .
 ```
@@ -109,7 +109,7 @@ function add a b
 #### Simple command for replying to user
 
 ```none
-command hello context.reply "Hello, $(context.author.name)".
+cmd hello context.reply "Hello, $(context.author.name)".
 ```
 
 #### Simple call to DSL integration
@@ -149,19 +149,21 @@ set prefix = "/"
 ```none
 use util.{add, div}.
 
-function add a b is a + b.
-function mul a b is a * b.
-function h_sub a b is a - b.
+fnc add a b is a + b.
+fnc mul a b is a * b.
+fnc h_sub a b is a - b.
 
-command add a b
-    context.reply $(use local function add a b).
-command div a b
-    context.reply $(use foreign function mul a b).
-command mul a b
-    context.reply $(use function mul a b).
-command sub a b
+cmd add a b
+    context.reply $(use local fnc add a b).
+cmd div a b
+    context.reply $(use foreign fnc mul a b).
+cmd mul a b
+    context.reply $(use fnc mul a b).
+cmd sub a b
     context.reply $(h_sub a b).
 ```
+
+#### 
 
 ## Semantics
 
